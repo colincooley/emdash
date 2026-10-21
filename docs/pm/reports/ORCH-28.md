@@ -82,6 +82,17 @@ file:C:/Program Files/Git/etc/gitconfig manager
 https://github.com/colincooley/emdash.git
 ```
 
-The remote uses HTTPS. Git Credential Manager (`manager`) is the configured Git credential helper. `gh auth status` showed the GitHub CLI logged into `colincooley` with token contents masked; no token or credential data is included here. The task branch push output is recorded after the commit below.
+The remote uses HTTPS. Git Credential Manager (`manager`) is the configured Git credential helper. `gh auth status` showed the GitHub CLI logged into `colincooley` with token contents masked; no token or credential data is included here. The push succeeded:
 
-Final `git status --short --branch` is recorded after commit and push; the report is the only repository file changed.
+```text
+To https://github.com/colincooley/emdash.git
+   d50bdf9b4..caf5b4d6c  emdash/28-l32rb -> emdash/28-l32rb
+```
+
+Final `git status --short --branch` after the report commit was pushed:
+
+```text
+## emdash/28-l32rb...origin/emdash/28-l32rb
+```
+
+The report is the only repository file changed.
