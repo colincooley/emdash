@@ -77,8 +77,8 @@ Recommended branch hygiene: one long-lived `feat/orchestrator` branch rebased we
 
 ## 5. Phase 0 Findings (2026-10-21)
 
-From `docs/pm/reports/ORCH-26.md` to `ORCH-28.md`; ORCH-25 (Claude ACP) still running.
-Decisions D-016 to D-020 are in `docs/pm/DECISIONS.md`.
+From `docs/pm/reports/ORCH-25.md` to `ORCH-28.md`. Decisions D-016 to D-024 are in
+`docs/pm/DECISIONS.md`.
 
 | Row | Result | Verdict |
 | --- | --- | --- |
@@ -88,7 +88,11 @@ Decisions D-016 to D-020 are in `docs/pm/DECISIONS.md`.
 | P4a (new) | Claude "extra usage" overage can bill beyond the plan; no per-session switch found | Open: Q-3 |
 | P5 (Codex) | HTTP MCP (bearer header arrives) and the Electron stdio shim both work on Windows; tools survive `session/load` when servers are passed again | Go for transport |
 | P5a (new, Codex) | `session/new.mcpServers` is **added to** the user's Codex MCP config, not a replacement | No-go for strict MCP until ORCH-31 (D-016) |
-| P6 | `ENABLE_CLAUDEAI_MCP_SERVERS=false` and `--strict-mcp-config` each remove claude.ai connectors (4 → 0) in the CLI; forwarding through the ACP adapter pending ORCH-25 | Go, pending ORCH-25 |
+| P5 (Claude) | ORCH-25: adapter 0.81.2 advertises `http`, `sse`, `loadSession`. HTTP MCP with bearer header works (header on every request, token not in logs or `~/.claude`); Electron stdio shim works, including paths with spaces; tools return after `session/load` with a new port and token | Go; HTTP primary |
+| P6 | Through ACP, `_meta.claudeCode.options.strictMcpConfig: true` limits the session to exactly the passed servers (drops `.mcp.json`, user servers and claude.ai connectors); `ENABLE_CLAUDEAI_MCP_SERVERS=false` drops only connectors | Go (D-021) |
+| P8 (Claude) | Option ids `mode` (`default`, `acceptEdits`, `plan`, `auto`, `bypassPermissions`), `model`, `effort` (`thought_level`), `fast`. MCP tool calls ask permission even in `acceptEdits`; `allowedTools` pre-approves exact names | Workers use `acceptEdits`; refuse `auto` and `bypassPermissions`; pre-approve orchestrator tools (D-022, D-023) |
+| P5b (new) | The ACP runtime sends only `{ cwd, mcpServers }`; orchestrated sessions need provider `_meta` too | ORCH-03 adds it (D-024) |
+| W1 | `127.0.0.1` listener under `electron.exe` raised no firewall prompt and created no rule | Go; owner confirms by eye in the real app |
 | P8 (Codex) | Option ids `mode` (`read-only`, `agent`, `agent-full-access`), `model` (matches `codex debug models`), `reasoning_effort` (values depend on model), `collaboration_mode`, `fast-mode`. No exact "edits allowed, commands ask" preset | Workers use `agent`; `agent-full-access` refused (D-017) |
 | P9 | A missing Codex session returns `-32603` "no rollout found", matching `isCodexSessionNotFound` | Confirmed |
 | W7 (Codex) | Commands run under `agent` on native Windows; sandbox enforcement outside the workspace not yet shown | Pending ORCH-31 |
