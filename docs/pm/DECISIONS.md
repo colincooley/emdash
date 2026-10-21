@@ -23,6 +23,11 @@ Status: **Approved** (the owner agreed), **Proposed** (waiting on the owner), or
 | D-013 | 2026-10-21 | In the product, a dependency gate defaults to "merged to `main`" (as in this process); "accepted by the PM" (stacked branches) is a per-run opt-in | Approved |
 | D-014 | 2026-10-21 | In the product, ready work dispatches automatically after the owner approves the initial plan (no per-task Launch click). The owner can still Hold, Edit or Cancel any queued node, and a per-run "manual launch" switch stays available. Until the product's launcher exists (ORCH-08/ORCH-10), the owner launches tasks by hand, because Emdash has no external way to create tasks today | Approved |
 | D-015 | 2026-10-21 | The PM presents each ready task as its own block (task, prompt file, agent, model, effort), never several tasks in one table, so each copies cleanly | Approved |
+| D-016 | 2026-10-21 | Codex `session/new.mcpServers` is additive to the user's Codex config (ORCH-26), so strict MCP for Codex workers is blocked until ORCH-31 finds an isolation mechanism. Claude workers are unaffected | Approved (PM, technical) |
+| D-017 | 2026-10-21 | Codex workers run with `mode=agent` (workspace-write + automatic review); `agent-full-access` is refused by policy. Native option ids: `mode`, `model`, `reasoning_effort`, `collaboration_mode` | Approved (PM, technical; revisit after ORCH-31 sandbox test) |
+| D-018 | 2026-10-21 | Session Policy scrub list is ORCH-27 §6.1, applied last to the final launch env, case-insensitive on Windows, including `CODEX_API_KEY` and `CLAUDE_CODE_OAUTH_TOKEN`. `CLAUDE_CONFIG_DIR` and `CODEX_HOME` are scrubbed by default; proxy variables pass through. Claude sessions also get `ENABLE_CLAUDEAI_MCP_SERVERS=false` plus strict MCP config | Approved (PM, technical) |
+| D-019 | 2026-10-21 | Auth preflight: Claude requires `claude auth status` JSON `authMethod=claude.ai`, `apiProvider=firstParty` and a non-empty `subscriptionType`; Codex requires `Logged in using ChatGPT`. Anything else, or unknown, blocks the run. Usage probes fail closed | Approved (PM, technical) |
+| D-020 | 2026-10-21 | Branch-protection preflight uses `GET /repos/{o}/{r}/rules/branches/{default}` and looks for an active `pull_request` rule; errors map to `unknown`, never `unprotected` | Approved (PM, technical) |
 
 ## Open questions
 
@@ -30,4 +35,7 @@ Waiting on the owner. A question only blocks the tasks listed under "Blocks".
 
 | ID | Question | Source | Blocks |
 | --- | --- | --- | --- |
-| — | None open. Q-1 answered by D-014 (auto-dispatch); Q-2 answered by D-013 (merged to `main`) | — | — |
+| Q-3 | Claude "extra usage" (pay-per-use overage) can bill beyond the subscription, and ORCH-27 found no per-session switch. Will you turn extra usage off in your claude.ai account settings? PM recommendation: yes, and the product warns when the usage probe shows it on | ORCH-27 | ORCH-06 (warning only) |
+| Q-4 | Workers push with your own GitHub login. GitHub can't tell an agent using that login from you, so no ruleset can stop an agent from merging (`gh pr merge`) or editing the ruleset (ORCH-28). Options: (a) accept for v1 and rely on the worker instructions plus the orchestrator having no merge tool; (b) give workers a separate bot account with write access, then require 1 approval on `main` so only you can approve and merge. PM recommendation: (a) now, (b) before running Orchestrator Mode on other projects | ORCH-28 | ORCH-20 (design only) |
+
+Answered: Q-1 by D-014 (auto-dispatch); Q-2 by D-013 (merged to `main`).

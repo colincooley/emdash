@@ -224,3 +224,8 @@ ORCH-00 is split into four parallel spikes (D-009). Briefs: `docs/pm/tasks/ORCH-
       hotspot it needs.
 - [ ] The conflict is shown on the node's Next up card.
 - [ ] Tests cover exact, prefix, and glob overlaps, Windows path spelling, and hotspot exclusivity.
+
+### ORCH-31 · Codex MCP isolation and Windows sandbox boundary
+
+Follow-up spike to ORCH-26 (D-016). Brief: `docs/pm/tasks/ORCH-31.md`; acceptance criteria are in
+the brief.
