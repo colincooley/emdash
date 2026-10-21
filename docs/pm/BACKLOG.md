@@ -12,18 +12,39 @@ Slots: **1 / 5 used** (PM).
 | --- | --- | --- | --- |
 | PM | Claude Code · Opus 5.5 | `emdash/project-manager-1wp2u` | 2026-10-21 |
 
-**Before launching anything:** merge the PM PR for `emdash/project-manager-1wp2u`. Task branches
-start from `main`, and the briefs point at `docs/pm/` and `docs/orchestrator/`, which only exist on
-the PM branch until it's merged.
+**Ready now** (launch all four → 5 / 5). Paste the whole prompt file into a new Emdash task:
 
-**Ready now (launch all four together → 5 / 5):**
+```text
+ORCH-25 — Claude ACP: per-session MCP, config options, Windows
+Prompt: docs/pm/tasks/ORCH-25.md
+Agent:  Claude Code
+Model:  Opus 5.5
+Effort: high
+```
 
-| Task | Prompt (paste the whole file) | Agent | Model (effort) |
-| --- | --- | --- | --- |
-| ORCH-25 | `docs/pm/tasks/ORCH-25.md` — Claude ACP: per-session MCP, config options, Windows | Claude Code | Opus 5.5 (high) |
-| ORCH-26 | `docs/pm/tasks/ORCH-26.md` — Codex ACP: per-session MCP, config options, Windows | Codex | GPT-6.1 Sol (high) |
-| ORCH-27 | `docs/pm/tasks/ORCH-27.md` — Subscription-only auth, billing env vars, claude.ai connectors | Claude Code | Opus 5.5 (high) |
-| ORCH-28 | `docs/pm/tasks/ORCH-28.md` — GitHub branch-protection detection, task-branch push | Codex | GPT-6 Luna (medium) |
+```text
+ORCH-26 — Codex ACP: per-session MCP, config options, Windows sandbox
+Prompt: docs/pm/tasks/ORCH-26.md
+Agent:  Codex
+Model:  GPT-6.1 Sol
+Effort: high
+```
+
+```text
+ORCH-27 — Subscription-only auth, billing env vars, claude.ai connectors
+Prompt: docs/pm/tasks/ORCH-27.md
+Agent:  Claude Code
+Model:  Opus 5.5
+Effort: high
+```
+
+```text
+ORCH-28 — GitHub branch-protection detection, task-branch push
+Prompt: docs/pm/tasks/ORCH-28.md
+Agent:  Codex
+Model:  GPT-6 Luna
+Effort: medium
+```
 
 No ownership overlap: each owns only its own report and a scratch folder outside the repo.
 
@@ -80,7 +101,7 @@ Priority: **P0** blocks the phase, **P1** needed for the phase, **P2** nice to h
 | ORCH-07 | Execution Slot Governor | P0 | Backlog | ORCH-05 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/governor*` |
 | ORCH-08 | Worker Launcher | P0 | Backlog | ORCH-02, ORCH-04, ORCH-06, ORCH-07 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/launcher*` |
 | ORCH-09 | Completion Monitor | P0 | Backlog | ORCH-08 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/monitor*` |
-| ORCH-10 | Scheduler with dependencies and caps | P0 | Backlog | ORCH-02, ORCH-07, Q-2 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/scheduler*` |
+| ORCH-10 | Scheduler with dependencies and caps | P0 | Backlog | ORCH-02, ORCH-07 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/scheduler*` |
 | ORCH-30 | Ownership and hotspot gate (no two running nodes own overlapping paths) | P1 | Backlog | ORCH-10 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/ownership*` |
 | ORCH-11 | Orchestrator Wire contract and controller | P0 | Backlog | ORCH-02 | Codex · GPT-6.1 Sol (medium) | `features/orchestrator/api/`, `node/wire-controller.ts`, manifests (hotspot) |
 
@@ -91,8 +112,8 @@ Priority: **P0** blocks the phase, **P1** needed for the phase, **P2** nice to h
 | ORCH-12 | MCP Gateway (loopback, tokens, Host checks, stdio shim) | P0 | Backlog | ORCH-03, ORCH-25 | Claude Code · Opus 5.5 (xhigh) | `features/orchestrator/node/mcp-gateway/` |
 | ORCH-13 | PM and worker tools | P0 | Backlog | ORCH-12 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/mcp-tools/` |
 | ORCH-14 | PM Supervisor (PM task, digests) | P0 | Backlog | ORCH-09, ORCH-13 | Claude Code · Opus 5.5 (xhigh) | `features/orchestrator/node/pm-supervisor*` |
-| ORCH-15 | Initial plan review and findings feed | P0 | Backlog | ORCH-14, Q-1 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/plan*`, browser plan view |
-| ORCH-29 | "Next up" list: each node's prompt, agent, model, effort, owns; editable before dispatch | P0 | Backlog | ORCH-11, Q-1 | Claude Code · Opus 5.5 (high) | `features/orchestrator/browser/next-up*` |
+| ORCH-15 | Initial plan review and findings feed | P0 | Backlog | ORCH-14 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/plan*`, browser plan view |
+| ORCH-29 | "Next up" list: each node's prompt, agent, model, effort, owns; editable before dispatch | P0 | Backlog | ORCH-11 | Claude Code · Opus 5.5 (high) | `features/orchestrator/browser/next-up*` |
 
 ### P4 to P6
 

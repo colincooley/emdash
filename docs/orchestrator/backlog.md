@@ -97,7 +97,8 @@ Verify P1, P2, P5, P6, P8 and W1/W2 from [risks](risks.md).
 
 ### ORCH-10 · Scheduler
 
-- [ ] Ready = queued + all upstream succeeded; cycles rejected on edge insert.
+- [ ] Ready = queued + every upstream node's PR merged to the default branch (D-013); a per-run
+      opt-in allows "accepted by the PM" (stacked branches). Cycles rejected on edge insert.
 - [ ] Priority then FIFO; event-driven plus `Clock` backstop tick.
 - [ ] Per-run caps (nodes, attempts, follow-ups, dispatch rate) move the run to `needs-human`.
 - [ ] Manual-clock tests cover dependency chains, cap reached, and slot freed.
@@ -214,7 +215,8 @@ ORCH-00 is split into four parallel spikes (D-009). Briefs: `docs/pm/tasks/ORCH-
       catalogs), the PM's reason, owned paths, dependencies, and blocking decisions.
 - [ ] Brief, agent, model, and effort are editable before dispatch; edits are journaled.
 - [ ] Actions: Launch now, Hold, Edit, Cancel; plan-review mode adds Approve.
-- [ ] Auto-dispatch vs Launch-now behavior follows the run setting decided in Q-1.
+- [ ] Ready nodes auto-dispatch after plan approval (D-014); a per-run "manual launch" switch makes
+      them wait for Launch now. Held nodes never auto-dispatch.
 
 ### ORCH-30 · Ownership and hotspot gate
 

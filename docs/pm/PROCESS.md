@@ -29,6 +29,20 @@ meant to automate this process later (see `docs/orchestrator/architecture.md` §
    task holds.
 4. All its dependencies are merged to `main`, and no open question it depends on is unanswered.
 
+## Presenting ready tasks
+
+When the PM recommends launches, each task gets its own block (D-015), never one shared table:
+
+```text
+ORCH-xx — <one-line title>
+Prompt: docs/pm/tasks/ORCH-xx.md (paste the whole file)
+Agent:  Claude Code | Codex
+Model:  <model>
+Effort: <effort>
+```
+
+The board in `BACKLOG.md` uses the same per-task blocks under "Ready now".
+
 ## Decisions and open questions
 
 The owner makes product decisions. When a brief or the design leaves something open:

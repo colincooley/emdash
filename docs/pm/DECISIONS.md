@@ -20,7 +20,9 @@ Status: **Approved** (the owner agreed), **Proposed** (waiting on the owner), or
 | D-010 | 2026-10-21 | Spike code stays outside the repo (a scratch folder); only the report is committed | Approved (PM, process) |
 | D-011 | 2026-10-21 | PM process docs are not referenced from `AGENTS.md` (an upstream hotspot); briefs are self-contained and point at `docs/pm/PROCESS.md` | Approved (PM, process) |
 | D-012 | 2026-10-21 | The product mirrors this manual process: each work item carries a paste-ready prompt, suggested agent, model, effort, owned paths, and dependencies; the owner sees them in a "next up" list (architecture §11) | Approved |
-| D-013 | 2026-10-21 | In the product, a dependency gate defaults to "merged to `main`" (as in this process); "accepted by the PM" (stacked branches) is a per-run opt-in | Proposed |
+| D-013 | 2026-10-21 | In the product, a dependency gate defaults to "merged to `main`" (as in this process); "accepted by the PM" (stacked branches) is a per-run opt-in | Approved |
+| D-014 | 2026-10-21 | In the product, ready work dispatches automatically after the owner approves the initial plan (no per-task Launch click). The owner can still Hold, Edit or Cancel any queued node, and a per-run "manual launch" switch stays available. Until the product's launcher exists (ORCH-08/ORCH-10), the owner launches tasks by hand, because Emdash has no external way to create tasks today | Approved |
+| D-015 | 2026-10-21 | The PM presents each ready task as its own block (task, prompt file, agent, model, effort), never several tasks in one table, so each copies cleanly | Approved |
 
 ## Open questions
 
@@ -28,5 +30,4 @@ Waiting on the owner. A question only blocks the tasks listed under "Blocks".
 
 | ID | Question | Source | Blocks |
 | --- | --- | --- | --- |
-| Q-1 | Should the product auto-dispatch ready work after plan approval (current design), or show each next task for a one-click launch like this manual process? A per-run toggle is possible | D-012 | ORCH-15, ORCH-29 (design only; Phase 0 unaffected) |
-| Q-2 | D-013: is "merged to main" the right default dependency gate for the product? | PM | ORCH-10 |
+| — | None open. Q-1 answered by D-014 (auto-dispatch); Q-2 answered by D-013 (merged to `main`) | — | — |

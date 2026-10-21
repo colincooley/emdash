@@ -562,7 +562,7 @@ the same things the owner looks at, so moving from manual to automated changes w
 | Agent and model guidance tables | Run policy defaults + PM instructions; the PM must give a one-line reason per choice |
 | "Owns / Read only / Must not touch" | Node `owns`, `readOnly`, `mustNotTouch` path lists; included in the brief and enforced as a dispatch gate (ORCH-30) |
 | Single-owner hotspots | Run policy `hotspots` list; only one running node may own each |
-| "Depends on (merged)" | Edges; gate defaults to merged-to-`main` (D-013, proposed) |
+| "Depends on (merged)" | Edges; gate defaults to merged-to-`main` (D-013) |
 | `DECISIONS.md` open questions with "Blocks" | Inbox decisions with `blocksNodeIds` (§5.7) |
 | Report template `reports/T-xxx.md` | `submit_result` fields: status, summary, changed files, verification, tests, how to check by hand, deviations, blockers and open questions, suggested follow-ups |
 | Owner merges on GitHub | Unchanged (D-005) |
@@ -579,6 +579,7 @@ The **Next up** list shows each ready or queued node as a card with:
 - actions: **Launch now**, **Hold**, **Edit**, **Cancel**.
 
 During initial plan review every node appears here with **Approve**. After the plan is approved,
-whether ready nodes dispatch automatically or wait for **Launch now** is a per-run setting
-(open question Q-1 in `docs/pm/DECISIONS.md`). Either way, the owner sees prompt, agent, model and
-effort before or as each task starts, the same as in the manual process.
+ready nodes dispatch automatically as slots free up (D-014); **Launch now** only matters for a run
+switched to manual launch, or to start a held node. Queued nodes stay editable until they
+dispatch, so the owner sees and can change prompt, agent, model and effort before each task starts,
+the same as in the manual process.
