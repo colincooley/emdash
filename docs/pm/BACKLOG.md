@@ -6,36 +6,62 @@ Acceptance criteria for ORCH-01 to ORCH-24 are in `docs/orchestrator/backlog.md`
 
 ## Board
 
-Slots: **1 / 5 used** (PM).
+Slots: **2 / 5 used** (PM, ORCH-25).
 
 | Running | Agent · model | Branch | Started |
 | --- | --- | --- | --- |
 | PM | Claude Code · Opus 5.5 | `emdash/project-manager-1wp2u` | 2026-10-21 |
+| ORCH-25 | Claude Code · Opus 5.5 | `emdash/25-m0ps4` | 2026-10-21 |
 
-**Before launching anything:** merge the PM PR for `emdash/project-manager-1wp2u`. Task branches
-start from `main`, and the briefs point at `docs/pm/` and `docs/orchestrator/`, which only exist on
-the PM branch until it's merged.
+In review (merge on GitHub): ORCH-26, ORCH-27, ORCH-28 report PRs.
 
-**Ready now (launch all four together → 5 / 5):**
+**Ready now** (launch all three → 5 / 5). Paste the whole prompt file into a new Emdash task.
+Merge the ORCH-26 PR before launching ORCH-31; it starts from `main` and reads that report.
 
-| Task | Prompt (paste the whole file) | Agent | Model (effort) |
-| --- | --- | --- | --- |
-| ORCH-25 | `docs/pm/tasks/ORCH-25.md` — Claude ACP: per-session MCP, config options, Windows | Claude Code | Opus 5.5 (high) |
-| ORCH-26 | `docs/pm/tasks/ORCH-26.md` — Codex ACP: per-session MCP, config options, Windows | Codex | GPT-6.1 Sol (high) |
-| ORCH-27 | `docs/pm/tasks/ORCH-27.md` — Subscription-only auth, billing env vars, claude.ai connectors | Claude Code | Opus 5.5 (high) |
-| ORCH-28 | `docs/pm/tasks/ORCH-28.md` — GitHub branch-protection detection, task-branch push | Codex | GPT-6 Luna (medium) |
+```text
+ORCH-01 — Orchestrator Mode setting (off by default)
+Prompt: docs/pm/tasks/ORCH-01.md
+Agent:  Codex
+Model:  GPT-6.1 Sol
+Effort: medium
+```
 
-No ownership overlap: each owns only its own report and a scratch folder outside the repo.
+```text
+ORCH-02 — Orchestrator durable store and state machine
+Prompt: docs/pm/tasks/ORCH-02.md
+Agent:  Codex
+Model:  GPT-6.1 Sol
+Effort: high
+```
 
-**Queued (launch order once Phase 0 reports are merged and the PM has folded them in):**
+```text
+ORCH-31 — Codex MCP isolation and Windows sandbox boundary
+Prompt: docs/pm/tasks/ORCH-31.md
+Agent:  Codex
+Model:  GPT-6.1 Sol
+Effort: high
+```
 
-1. ORCH-02 (store) and ORCH-01 (flag) — no Phase 0 dependency on findings, but held so slots stay
-   free for the spikes
-2. ORCH-03 (after ORCH-25, ORCH-26)
-3. ORCH-06 (after ORCH-27)
-4. ORCH-04, ORCH-05
+No ownership overlap: ORCH-01 owns `features/orchestrator/contributions/`, the enabled accessor,
+the settings manifest and one settings page; ORCH-02 owns `features/orchestrator/node/store/` and
+one desktop `package.json` script line; ORCH-31 owns only its report.
 
-**Human:** after ORCH-28, enable the recommended branch protection on the fork's `main`.
+**Queued (in launch order):**
+
+1. ORCH-06 Session Policy: after ORCH-25 reports (whether the Claude ACP adapter forwards
+   `strictMcpConfig` and env) and ORCH-27 is merged
+2. ORCH-03 session-scoped MCP: after ORCH-25 and ORCH-31
+3. ORCH-04, ORCH-05
+
+**Human:**
+
+- Merge the ORCH-26, ORCH-27 and ORCH-28 report PRs.
+- Add a branch ruleset on the fork's `main` (Settings → Rules → Rulesets): target
+  `refs/heads/main`, **Require a pull request before merging** with 0 required approvals (you're
+  the only collaborator and GitHub won't let you approve your own PR), **Block force pushes**,
+  **Restrict deletions**, no bypass list. This stops direct pushes to `main`; see Q-4 for what it
+  can't stop.
+- Answer Q-3 and Q-4 in `DECISIONS.md`.
 
 ## Parallel and sequential work
 
@@ -57,21 +83,22 @@ Priority: **P0** blocks the phase, **P1** needed for the phase, **P2** nice to h
 | ID | Task | Pri | Status | Depends on | Agent · model (effort) | Owns |
 | --- | --- | --- | --- | --- | --- | --- |
 | ORCH-00 | Phase 0 spikes (split into ORCH-25 to ORCH-28, D-009) | — | Superseded | — | — | — |
-| ORCH-25 | Claude ACP: per-session MCP (HTTP/stdio), config option ids, Windows loopback | P0 | Ready | — | Claude Code · Opus 5.5 (high) | `docs/pm/reports/ORCH-25.md` |
-| ORCH-26 | Codex ACP: per-session MCP (HTTP/stdio), config option ids, Windows sandbox | P0 | Ready | — | Codex · GPT-6.1 Sol (high) | `docs/pm/reports/ORCH-26.md` |
-| ORCH-27 | Subscription-only auth, billing env scrub list, claude.ai connector switch, usage probes | P0 | Ready | — | Claude Code · Opus 5.5 (high) | `docs/pm/reports/ORCH-27.md` |
-| ORCH-28 | Branch-protection detection, task-branch push evidence | P1 | Ready | — | Codex · GPT-6 Luna (medium) | `docs/pm/reports/ORCH-28.md` |
+| ORCH-25 | Claude ACP: per-session MCP (HTTP/stdio), config option ids, Windows loopback | P0 | Running | — | Claude Code · Opus 5.5 (high) | `docs/pm/reports/ORCH-25.md` |
+| ORCH-26 | Codex ACP: per-session MCP (HTTP/stdio), config option ids, Windows sandbox | P0 | In review | — | Codex · GPT-6.1 Sol (high) | `docs/pm/reports/ORCH-26.md` |
+| ORCH-27 | Subscription-only auth, billing env scrub list, claude.ai connector switch, usage probes | P0 | In review | — | Claude Code · Opus 5.5 (high) | `docs/pm/reports/ORCH-27.md` |
+| ORCH-28 | Branch-protection detection, task-branch push evidence | P1 | In review | — | Codex · GPT-6 Luna (medium) | `docs/pm/reports/ORCH-28.md` |
+| ORCH-31 | Codex MCP isolation and Windows sandbox boundary (follow-up to ORCH-26) | P0 | Ready | ORCH-26 | Codex · GPT-6.1 Sol (high) | `docs/pm/reports/ORCH-31.md` |
 
 ### P1 — Foundations
 
 | ID | Task | Pri | Status | Depends on | Agent · model (effort) | Owns (planned) |
 | --- | --- | --- | --- | --- | --- | --- |
-| ORCH-01 | Feature flag and settings contribution | P0 | Backlog | — | Codex · GPT-6.1 Sol (medium) | `features/orchestrator/contributions/settings.ts`, its test |
-| ORCH-02 | Orchestrator durable store and schemas | P0 | Backlog | — | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/store/` |
-| ORCH-03 | ACP session-scoped MCP servers (T1) | P0 | Backlog | ORCH-25, ORCH-26 | Claude Code · Opus 5.5 (xhigh) | `packages/core/src/runtimes/acp/api/schemas.ts`, `…/node/runtime/session-materializer.ts`, tests |
+| ORCH-01 | Orchestrator Mode setting (off by default) | P0 | Ready | — | Codex · GPT-6.1 Sol (medium) | `features/orchestrator/contributions/`, `node/orchestrator-enabled.ts`, settings manifest (hotspot), one settings page |
+| ORCH-02 | Orchestrator durable store and state machine | P0 | Ready | — | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/store/`, `drizzle-orchestrator.config.ts`, one desktop `package.json` script line (hotspot) |
+| ORCH-03 | ACP session-scoped MCP servers (T1) | P0 | Backlog | ORCH-25, ORCH-31 | Claude Code · Opus 5.5 (xhigh) | `packages/core/src/runtimes/acp/api/schemas.ts`, `…/node/runtime/session-materializer.ts`, tests |
 | ORCH-04 | Conversation target extraction + `decorateAcpInput` hook (T2) | P0 | Backlog | — | Claude Code · Opus 5.5 (high) | `features/conversations/node/wire-controller.ts` (+ new extracted file) |
 | ORCH-05 | Session census accessor (T3) | P1 | Backlog | — | Codex · GPT-6.1 Sol (medium) | `src/main/core/acp/agent-status-bridge.ts`, its test |
-| ORCH-06 | Session Policy (env scrub, preflight, strict MCP, refused modes) | P0 | Backlog | ORCH-27 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/session-policy*` |
+| ORCH-06 | Session Policy (env scrub, preflight, strict MCP, refused modes) | P0 | Backlog | ORCH-25, ORCH-27 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/session-policy*` |
 
 ### P2 — Headless workers
 
@@ -80,7 +107,7 @@ Priority: **P0** blocks the phase, **P1** needed for the phase, **P2** nice to h
 | ORCH-07 | Execution Slot Governor | P0 | Backlog | ORCH-05 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/governor*` |
 | ORCH-08 | Worker Launcher | P0 | Backlog | ORCH-02, ORCH-04, ORCH-06, ORCH-07 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/launcher*` |
 | ORCH-09 | Completion Monitor | P0 | Backlog | ORCH-08 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/monitor*` |
-| ORCH-10 | Scheduler with dependencies and caps | P0 | Backlog | ORCH-02, ORCH-07, Q-2 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/scheduler*` |
+| ORCH-10 | Scheduler with dependencies and caps | P0 | Backlog | ORCH-02, ORCH-07 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/scheduler*` |
 | ORCH-30 | Ownership and hotspot gate (no two running nodes own overlapping paths) | P1 | Backlog | ORCH-10 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/ownership*` |
 | ORCH-11 | Orchestrator Wire contract and controller | P0 | Backlog | ORCH-02 | Codex · GPT-6.1 Sol (medium) | `features/orchestrator/api/`, `node/wire-controller.ts`, manifests (hotspot) |
 
@@ -91,8 +118,8 @@ Priority: **P0** blocks the phase, **P1** needed for the phase, **P2** nice to h
 | ORCH-12 | MCP Gateway (loopback, tokens, Host checks, stdio shim) | P0 | Backlog | ORCH-03, ORCH-25 | Claude Code · Opus 5.5 (xhigh) | `features/orchestrator/node/mcp-gateway/` |
 | ORCH-13 | PM and worker tools | P0 | Backlog | ORCH-12 | Codex · GPT-6.1 Sol (high) | `features/orchestrator/node/mcp-tools/` |
 | ORCH-14 | PM Supervisor (PM task, digests) | P0 | Backlog | ORCH-09, ORCH-13 | Claude Code · Opus 5.5 (xhigh) | `features/orchestrator/node/pm-supervisor*` |
-| ORCH-15 | Initial plan review and findings feed | P0 | Backlog | ORCH-14, Q-1 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/plan*`, browser plan view |
-| ORCH-29 | "Next up" list: each node's prompt, agent, model, effort, owns; editable before dispatch | P0 | Backlog | ORCH-11, Q-1 | Claude Code · Opus 5.5 (high) | `features/orchestrator/browser/next-up*` |
+| ORCH-15 | Initial plan review and findings feed | P0 | Backlog | ORCH-14 | Claude Code · Opus 5.5 (high) | `features/orchestrator/node/plan*`, browser plan view |
+| ORCH-29 | "Next up" list: each node's prompt, agent, model, effort, owns; editable before dispatch | P0 | Backlog | ORCH-11 | Claude Code · Opus 5.5 (high) | `features/orchestrator/browser/next-up*` |
 
 ### P4 to P6
 

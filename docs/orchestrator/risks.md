@@ -74,3 +74,22 @@ the ACP runtime, tasks slice, automations runtime, or app DB that this feature t
 
 Recommended branch hygiene: one long-lived `feat/orchestrator` branch rebased weekly onto
 `upstream/main`; T1–T3 kept as separate, upstreamable commits at the base of the branch.
+
+## 5. Phase 0 Findings (2026-10-21)
+
+From `docs/pm/reports/ORCH-26.md` to `ORCH-28.md`; ORCH-25 (Claude ACP) still running.
+Decisions D-016 to D-020 are in `docs/pm/DECISIONS.md`.
+
+| Row | Result | Verdict |
+| --- | --- | --- |
+| P1 | Confirmed: `ANTHROPIC_API_KEY` / `ANTHROPIC_AUTH_TOKEN` (even invalid) win over the claude.ai login and also disable claude.ai connectors. `claude auth status` JSON `authMethod` tells login types apart | Go, with scrub + preflight (D-018, D-019) |
+| P2 | `OPENAI_API_KEY` and `OPENAI_BASE_URL` are ignored while logged in with ChatGPT, but **`CODEX_API_KEY` wins** and isn't in today's allowlist | Go, with scrub + preflight; `CODEX_API_KEY` is on the scrub list |
+| P4 | Usage probes are read-only, about 1 s, and return percent used and reset time per window for both providers; both use experimental APIs | Go as a coarse gate that fails closed |
+| P4a (new) | Claude "extra usage" overage can bill beyond the plan; no per-session switch found | Open: Q-3 |
+| P5 (Codex) | HTTP MCP (bearer header arrives) and the Electron stdio shim both work on Windows; tools survive `session/load` when servers are passed again | Go for transport |
+| P5a (new, Codex) | `session/new.mcpServers` is **added to** the user's Codex MCP config, not a replacement | No-go for strict MCP until ORCH-31 (D-016) |
+| P6 | `ENABLE_CLAUDEAI_MCP_SERVERS=false` and `--strict-mcp-config` each remove claude.ai connectors (4 → 0) in the CLI; forwarding through the ACP adapter pending ORCH-25 | Go, pending ORCH-25 |
+| P8 (Codex) | Option ids `mode` (`read-only`, `agent`, `agent-full-access`), `model` (matches `codex debug models`), `reasoning_effort` (values depend on model), `collaboration_mode`, `fast-mode`. No exact "edits allowed, commands ask" preset | Workers use `agent`; `agent-full-access` refused (D-017) |
+| P9 | A missing Codex session returns `-32603` "no rollout found", matching `isCodexSessionNotFound` | Confirmed |
+| W7 (Codex) | Commands run under `agent` on native Windows; sandbox enforcement outside the workspace not yet shown | Pending ORCH-31 |
+| S2 | Fork `main` is unprotected today; the rules endpoint works for detection. A worker using the owner's login can merge PRs or edit rulesets, and GitHub can't tell it apart from the owner | Owner adds a ruleset; Q-4 on worker identity (D-020) |
