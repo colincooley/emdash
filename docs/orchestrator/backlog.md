@@ -198,3 +198,27 @@ Workers keep the project's normal Git credentials (owner decision: workers may p
 - [ ] `agents/architecture/orchestrator.md` describes the shipped behavior; this folder marked
       historical.
 - [ ] ADR 0009 status → Accepted with any deviations recorded.
+
+---
+
+## Added 2026-10-21 (see `docs/pm/BACKLOG.md` for agent, model and status)
+
+### ORCH-25 to ORCH-28 · Phase 0 spikes
+
+ORCH-00 is split into four parallel spikes (D-009). Briefs: `docs/pm/tasks/ORCH-25.md` to
+`ORCH-28.md`; their acceptance criteria are in the briefs.
+
+### ORCH-29 · Next up list
+
+- [ ] Each ready/queued node shows its full brief, agent, model, effort (dropdowns from discovered
+      catalogs), the PM's reason, owned paths, dependencies, and blocking decisions.
+- [ ] Brief, agent, model, and effort are editable before dispatch; edits are journaled.
+- [ ] Actions: Launch now, Hold, Edit, Cancel; plan-review mode adds Approve.
+- [ ] Auto-dispatch vs Launch-now behavior follows the run setting decided in Q-1.
+
+### ORCH-30 · Ownership and hotspot gate
+
+- [ ] A node is not dispatched while any running node owns an overlapping path (glob-aware) or a
+      hotspot it needs.
+- [ ] The conflict is shown on the node's Next up card.
+- [ ] Tests cover exact, prefix, and glob overlaps, Windows path spelling, and hotspot exclusivity.

@@ -176,7 +176,7 @@ largest upstream-conflict source in this repo (sequential `drizzle/00NN_*.sql` p
 | Table | Purpose | Key fields |
 | --- | --- | --- |
 | `orch_runs` | One orchestration (a goal supervised by one PM) | `id`, `projectId`, `goal`, `state`, `pmTaskId`, `policy` (versioned JSON: caps, providers, models), `createdAt`, `revision` |
-| `orch_nodes` | One unit of delegated work; 1:1 with an ordinary task once dispatched | `id`, `runId`, `title`, `brief`, `provider` (`claude` \| `codex`), `options`, `baseFrom` (`default-branch` \| `node:<id>`), `priority`, `state`, `taskId?`, `conversationId?`, `attempt`, `followUps`, `result?` (versioned JSON) |
+| `orch_nodes` | One unit of delegated work; 1:1 with an ordinary task once dispatched | `id`, `runId`, `title`, `brief`, `provider` (`claude` \| `codex`), `model`, `effort`, `choiceReason`, `owns` / `readOnly` / `mustNotTouch` (path lists), `options`, `baseFrom` (`default-branch` \| `node:<id>`), `priority`, `state`, `taskId?`, `conversationId?`, `attempt`, `followUps`, `result?` (versioned JSON) |
 | `orch_edges` | Dependencies | `runId`, `fromNodeId`, `toNodeId` (to waits on from) |
 | `orch_events` | Append-only journal (state transitions, worker reports, PM tool calls, approvals) | `seq`, `runId`, `nodeId?`, `kind`, `payload`, `at` |
 | `orch_inbox` | Findings, decisions, and approvals for the human | `id`, `runId`, `type` (`finding` \| `decision` \| `approval`), `kind`, `blocksNodeIds`, `body`, `actionSpec?` (canonical JSON), `actionHash?`, `state` (`open` \| `answered` \| `approved` \| `rejected` \| `expired` \| `executed` \| `failed`), `answer?`, `decidedAt?` |
@@ -546,3 +546,39 @@ Everything else is new files under `src/core/features/orchestrator/`.
   byte-identical to before (T1/T2).
 - All manual and automated testing uses a scratch database and scratch repositories; no existing
   user project data (including any existing production project) is read or modified.
+
+## 11. Mirroring The Manual PM Process (D-012)
+
+Orchestrator Mode automates the PM process the owner already uses by hand (Toll's `docs/pm/`, and
+this repo's [`docs/pm/PROCESS.md`](../pm/PROCESS.md)). The product keeps the same vocabulary and
+the same things the owner looks at, so moving from manual to automated changes who presses
+"launch", not what is presented.
+
+| Manual process | Product equivalent |
+| --- | --- |
+| `BACKLOG.md` board: slots used, running, in review, ready now, queued | Orchestrator view header: census `n / 5`, running nodes, in review, **Next up**, queued |
+| Task brief `tasks/T-xxx.md` (paste-ready prompt) | Node `brief`: the exact prompt sent as the worker's initial message, shown verbatim |
+| "Suggested agent · Model (effort)" | Node `provider`, `model`, `effort` (native ACP config option ids, from ORCH-25/26) |
+| Agent and model guidance tables | Run policy defaults + PM instructions; the PM must give a one-line reason per choice |
+| "Owns / Read only / Must not touch" | Node `owns`, `readOnly`, `mustNotTouch` path lists; included in the brief and enforced as a dispatch gate (ORCH-30) |
+| Single-owner hotspots | Run policy `hotspots` list; only one running node may own each |
+| "Depends on (merged)" | Edges; gate defaults to merged-to-`main` (D-013, proposed) |
+| `DECISIONS.md` open questions with "Blocks" | Inbox decisions with `blocksNodeIds` (§5.7) |
+| Report template `reports/T-xxx.md` | `submit_result` fields: status, summary, changed files, verification, tests, how to check by hand, deviations, blockers and open questions, suggested follow-ups |
+| Owner merges on GitHub | Unchanged (D-005) |
+
+### Next up
+
+The **Next up** list shows each ready or queued node as a card with:
+
+- the full prompt (brief), expandable, editable before dispatch;
+- agent, model and effort, each a dropdown populated from the discovered provider catalogs, with the
+  PM's suggested value and reason;
+- owned paths and any overlap or hotspot conflict with running nodes;
+- dependencies and blocking decisions;
+- actions: **Launch now**, **Hold**, **Edit**, **Cancel**.
+
+During initial plan review every node appears here with **Approve**. After the plan is approved,
+whether ready nodes dispatch automatically or wait for **Launch now** is a per-run setting
+(open question Q-1 in `docs/pm/DECISIONS.md`). Either way, the owner sees prompt, agent, model and
+effort before or as each task starts, the same as in the manual process.
