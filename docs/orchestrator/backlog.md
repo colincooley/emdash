@@ -35,8 +35,8 @@ Verify P1, P2, P5, P6, P8 and W1/W2 from [risks](risks.md).
 
 ### ORCH-03 · ACP session-scoped MCP servers (T1)
 
-- [ ] Optional `sessionMcpServers` and `mcpServerMode` on the ACP start input; absent = today's
-      behavior exactly.
+- [ ] Optional `sessionMcpServers`, `mcpServerMode` and provider `sessionMeta` (D-024) on the ACP
+      start input, re-sent on `session/load`; absent = today's behavior exactly.
 - [ ] `mode: 'only'` excludes user-global MCP servers; `'merge'` appends.
 - [ ] Headers/env of session MCP servers are never written to persisted intents (test reads the
       intent file after start).
@@ -63,7 +63,9 @@ Verify P1, P2, P5, P6, P8 and W1/W2 from [risks](risks.md).
       only; normal sessions untouched (test).
 - [ ] Auth preflight blocks a run when auth is env-key or unknown, with an actionable message.
 - [ ] Orchestrated sessions use `mcpServerMode: 'only'` with the gateway + per-run allowlist.
-- [ ] Dangerous provider modes are rejected at policy validation.
+- [ ] Dangerous provider modes are rejected at policy validation: Claude `bypassPermissions`, `auto`;
+      Codex `agent-full-access`.
+- [ ] Brief: `docs/pm/tasks/ORCH-06.md` (pure module; wiring happens in ORCH-03 and ORCH-08).
 
 ### ORCH-07 · Execution Slot Governor
 

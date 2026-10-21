@@ -175,7 +175,8 @@ One or two sentences.
 
 ## Report
 Write `docs/pm/reports/ORCH-xx.md` using the report template in `docs/pm/PROCESS.md`, commit it on
-your branch, push the branch, and stop. Don't merge.
+your branch, push the branch, open a PR to `main` on `colincooley/emdash`, and stop. Don't
+merge.
 ```
 
 ## Completion report template

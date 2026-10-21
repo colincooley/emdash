@@ -28,6 +28,11 @@ Status: **Approved** (the owner agreed), **Proposed** (waiting on the owner), or
 | D-018 | 2026-10-21 | Session Policy scrub list is ORCH-27 §6.1, applied last to the final launch env, case-insensitive on Windows, including `CODEX_API_KEY` and `CLAUDE_CODE_OAUTH_TOKEN`. `CLAUDE_CONFIG_DIR` and `CODEX_HOME` are scrubbed by default; proxy variables pass through. Claude sessions also get `ENABLE_CLAUDEAI_MCP_SERVERS=false` plus strict MCP config | Approved (PM, technical) |
 | D-019 | 2026-10-21 | Auth preflight: Claude requires `claude auth status` JSON `authMethod=claude.ai`, `apiProvider=firstParty` and a non-empty `subscriptionType`; Codex requires `Logged in using ChatGPT`. Anything else, or unknown, blocks the run. Usage probes fail closed | Approved (PM, technical) |
 | D-020 | 2026-10-21 | Branch-protection preflight uses `GET /repos/{o}/{r}/rules/branches/{default}` and looks for an active `pull_request` rule; errors map to `unknown`, never `unprotected` | Approved (PM, technical) |
+| D-021 | 2026-10-21 | Claude workers get strict MCP through `_meta.claudeCode.options.strictMcpConfig: true` on both `session/new` and `session/load` (ORCH-25), with `ENABLE_CLAUDEAI_MCP_SERVERS=false` as a second layer | Approved (PM, technical) |
+| D-022 | 2026-10-21 | Claude native option ids are `mode`, `model`, `effort`. Workers default to `mode=acceptEdits`; `bypassPermissions` and `auto` are refused | Approved (PM, technical) |
+| D-023 | 2026-10-21 | Orchestrator tools are pre-approved per role with exact names in `allowedTools` (`mcp__emdash_orch__<tool>`); the MCP server name is fixed as `emdash_orch` | Approved (PM, technical) |
+| D-024 | 2026-10-21 | ORCH-03 adds an optional per-session provider `_meta` field to the ACP start input alongside `sessionMcpServers`, re-sent on load and never persisted in intents | Approved (PM, technical) |
+| D-025 | 2026-10-21 | Every brief ends with "push your branch and open a PR to `main`" so finished work always shows up as a PR | Approved (PM, process) |
 
 ## Open questions
 
@@ -37,5 +42,7 @@ Waiting on the owner. A question only blocks the tasks listed under "Blocks".
 | --- | --- | --- | --- |
 | Q-3 | Claude "extra usage" (pay-per-use overage) can bill beyond the subscription, and ORCH-27 found no per-session switch. Will you turn extra usage off in your claude.ai account settings? PM recommendation: yes, and the product warns when the usage probe shows it on | ORCH-27 | ORCH-06 (warning only) |
 | Q-4 | Workers push with your own GitHub login. GitHub can't tell an agent using that login from you, so no ruleset can stop an agent from merging (`gh pr merge`) or editing the ruleset (ORCH-28). Options: (a) accept for v1 and rely on the worker instructions plus the orchestrator having no merge tool; (b) give workers a separate bot account with write access, then require 1 approval on `main` so only you can approve and merge. PM recommendation: (a) now, (b) before running Orchestrator Mode on other projects | ORCH-28 | ORCH-20 (design only) |
+
+| Q-5 | Orchestrated Claude sessions currently load your user and project Claude settings (hooks, plugins, skills, `CLAUDE.md`). Keep that, or limit them to project settings only? PM recommendation: keep both for v1, because repo instructions and your hooks matter, and revisit if a hook or plugin misbehaves | ORCH-25 | — (nothing blocked) |
 
 Answered: Q-1 by D-014 (auto-dispatch); Q-2 by D-013 (merged to `main`).
